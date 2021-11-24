@@ -1,14 +1,14 @@
 [package]
-name = "heed"
-version = "0.12.1"
+name = "smolheed"
+version = "0.1.0"
 authors = ["Kerollmops <renault.cle@gmail.com>"]
-description = "A fully typed LMDB/MDBX wrapper with minimum overhead"
+description = "A thin wrapped on top of LMDB with minimum overhead"
 license = "MIT"
-repository = "https://github.com/Kerollmops/heed"
-keywords = ["lmdb", "database", "storage", "typed"]
+repository = "https://github.com/Kerollmops/smolheed"
+keywords = ["lmdb", "database", "storage"]
 categories = ["database", "data-structures"]
-readme = "../README.md"
-edition = "2018"
+readme = "README.md"
+edition = "2021"
 
 [dependencies]
 libc = "0.2.80"

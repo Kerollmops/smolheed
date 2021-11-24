@@ -2,7 +2,7 @@ use std::error::Error;
 use std::fs;
 use std::path::Path;
 
-use heed::EnvOpenOptions;
+use smolheed::EnvOpenOptions;
 
 // In this test we are checking that we can clear database entries and
 // write just after in the same transaction without loosing the writes.

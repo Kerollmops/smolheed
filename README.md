@@ -1,14 +1,9 @@
-# heed
-A fully typed [LMDB]/[MDBX] wrapper with minimum overhead, uses zerocopy internally.
+# smolheed
 
-[![Build Status](https://dev.azure.com/renaultcle/heed/_apis/build/status/Kerollmops.heed?branchName=master)](https://dev.azure.com/renaultcle/heed/_build/latest?definitionId=1&branchName=master)
-[![Dependency Status](https://deps.rs/repo/github/Kerollmops/heed/status.svg)](https://deps.rs/repo/github/Kerollmops/heed)
-[![Heed Doc](https://docs.rs/heed/badge.svg)](https://docs.rs/heed)
-[![Crates.io](https://img.shields.io/crates/v/heed.svg)](https://crates.io/crates/heed)
+A thin wrapped on top of [LMDB] with minimum overhead.
+It is derived [from the heed crate](https://github.com/Kerollmops/heed) which is more typed and a little bit more complex.
 
-![the opposite of heed](https://thesaurus.plus/img/antonyms/153/heed.png)
-
-//! It provides you a way to store types in LMDB without any limit and with a minimal overhead as possible.
+It provides you a way to store key/values in LMDB without any limit and with a minimal overhead.
 
 ## Example Usage
 
@@ -42,6 +37,6 @@ let ret = db.get(&rtxn, "five")?;
 assert_eq!(ret, Some(&5.to_be_bytes()[..]));
 ```
 
-You want to see more about all the possibilities? Go check out [the examples](heed/examples/).
+You want to see more about all the possibilities? Go check out [the examples](smolheed/examples/).
 
 [LMDB]: https://en.wikipedia.org/wiki/Lightning_Memory-Mapped_Database

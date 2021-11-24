@@ -2,7 +2,7 @@ use std::error::Error;
 use std::fs;
 use std::path::Path;
 
-use heed::EnvOpenOptions;
+use smolheed::EnvOpenOptions;
 
 // In this test we are checking that we can append ordered entries in one
 // database even if there is multiple databases which already contain entries.

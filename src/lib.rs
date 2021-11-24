@@ -15,7 +15,7 @@
 //! ```
 //! use std::fs;
 //! use std::path::Path;
-//! use heed::{EnvOpenOptions, Database};
+//! use smolheed::{EnvOpenOptions, Database};
 //!
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! fs::create_dir_all(Path::new("target").join("zerocopy.mdb"))?;

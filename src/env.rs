@@ -105,8 +105,8 @@ impl EnvOpenOptions {
     /// ```
     /// use std::fs;
     /// use std::path::Path;
-    /// use heed::{EnvOpenOptions, Database};
-    /// use heed::flags::Flags;
+    /// use smolheed::{EnvOpenOptions, Database};
+    /// use smolheed::flags::Flags;
     ///
     /// # fn main() -> Result<(), Box<dyn std::error::Error>> {
     /// fs::create_dir_all(Path::new("target").join("zerocopy.mdb"))?;

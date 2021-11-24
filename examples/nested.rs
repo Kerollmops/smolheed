@@ -2,7 +2,7 @@ use std::error::Error;
 use std::fs;
 use std::path::Path;
 
-use heed::EnvOpenOptions;
+use smolheed::EnvOpenOptions;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let path = Path::new("target").join("heed.mdb");
