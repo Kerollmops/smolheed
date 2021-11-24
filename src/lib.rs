@@ -51,18 +51,19 @@ mod iter;
 mod mdb;
 mod txn;
 
+use std::{error, fmt, io, result};
+
 use self::cursor::{RoCursor, RwCursor};
 pub use self::database::Database;
 pub use self::env::{env_closing_event, CompactionOption, Env, EnvClosingEvent, EnvOpenOptions};
-pub use self::iter::{RoIter, RoRevIter, RwIter, RwRevIter};
-pub use self::iter::{RoPrefix, RoRevPrefix, RwPrefix, RwRevPrefix};
-pub use self::iter::{RoRange, RoRevRange, RwRange, RwRevRange};
+pub use self::iter::{
+    RoIter, RoPrefix, RoRange, RoRevIter, RoRevPrefix, RoRevRange, RwIter, RwPrefix, RwRange,
+    RwRevIter, RwRevPrefix, RwRevRange,
+};
 pub use self::mdb::error::Error as MdbError;
 use self::mdb::ffi::{from_val, into_val};
 pub use self::mdb::flags;
 pub use self::txn::{RoTxn, RwTxn};
-
-use std::{error, fmt, io, result};
 
 /// An error that encapsulates all possible errors in this crate.
 #[derive(Debug)]

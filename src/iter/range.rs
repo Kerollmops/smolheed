@@ -12,9 +12,9 @@ fn move_on_range_end<'txn>(
             Ok(_) => cursor.move_on_prev(),
             Err(e) => Err(e),
         },
-        Bound::Excluded(end) => cursor
-            .move_on_key_greater_than_or_equal_to(end)
-            .and_then(|_| cursor.move_on_prev()),
+        Bound::Excluded(end) => {
+            cursor.move_on_key_greater_than_or_equal_to(end).and_then(|_| cursor.move_on_prev())
+        }
         Bound::Unbounded => cursor.move_on_last(),
     }
 }
@@ -47,12 +47,7 @@ impl<'txn> RoRange<'txn> {
         start_bound: Bound<Vec<u8>>,
         end_bound: Bound<Vec<u8>>,
     ) -> RoRange<'txn> {
-        RoRange {
-            cursor,
-            move_on_start: true,
-            start_bound,
-            end_bound,
-        }
+        RoRange { cursor, move_on_start: true, start_bound, end_bound }
     }
 }
 
@@ -90,10 +85,7 @@ impl<'txn> Iterator for RoRange<'txn> {
         let result = if self.move_on_start {
             move_on_range_end(&mut self.cursor, &self.end_bound)
         } else {
-            match (
-                self.cursor.current(),
-                move_on_range_end(&mut self.cursor, &self.end_bound),
-            ) {
+            match (self.cursor.current(), move_on_range_end(&mut self.cursor, &self.end_bound)) {
                 (Ok(Some((ckey, _))), Ok(Some((key, data)))) if ckey != key => {
                     Ok(Some((key, data)))
                 }
@@ -135,12 +127,7 @@ impl<'txn> RwRange<'txn> {
         start_bound: Bound<Vec<u8>>,
         end_bound: Bound<Vec<u8>>,
     ) -> RwRange<'txn> {
-        RwRange {
-            cursor,
-            move_on_start: true,
-            start_bound,
-            end_bound,
-        }
+        RwRange { cursor, move_on_start: true, start_bound, end_bound }
     }
 
     /// Delete the entry the cursor is currently pointing to.
@@ -252,10 +239,7 @@ impl<'txn> Iterator for RwRange<'txn> {
         let result = if self.move_on_start {
             move_on_range_end(&mut self.cursor, &self.end_bound)
         } else {
-            match (
-                self.cursor.current(),
-                move_on_range_end(&mut self.cursor, &self.end_bound),
-            ) {
+            match (self.cursor.current(), move_on_range_end(&mut self.cursor, &self.end_bound)) {
                 (Ok(Some((ckey, _))), Ok(Some((key, data)))) if ckey != key => {
                     Ok(Some((key, data)))
                 }
@@ -297,12 +281,7 @@ impl<'txn> RoRevRange<'txn> {
         start_bound: Bound<Vec<u8>>,
         end_bound: Bound<Vec<u8>>,
     ) -> RoRevRange<'txn> {
-        RoRevRange {
-            cursor,
-            move_on_end: true,
-            start_bound,
-            end_bound,
-        }
+        RoRevRange { cursor, move_on_end: true, start_bound, end_bound }
     }
 }
 
@@ -384,12 +363,7 @@ impl<'txn> RwRevRange<'txn> {
         start_bound: Bound<Vec<u8>>,
         end_bound: Bound<Vec<u8>>,
     ) -> RwRevRange<'txn> {
-        RwRevRange {
-            cursor,
-            move_on_end: true,
-            start_bound,
-            end_bound,
-        }
+        RwRevRange { cursor, move_on_end: true, start_bound, end_bound }
     }
 
     /// Delete the entry the cursor is currently pointing to.

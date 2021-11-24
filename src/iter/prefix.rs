@@ -21,11 +21,7 @@ pub struct RoPrefix<'txn> {
 
 impl<'txn> RoPrefix<'txn> {
     pub(crate) fn new(cursor: RoCursor<'txn>, prefix: Vec<u8>) -> RoPrefix<'txn> {
-        RoPrefix {
-            cursor,
-            prefix,
-            move_on_first: true,
-        }
+        RoPrefix { cursor, prefix, move_on_first: true }
     }
 }
 
@@ -35,15 +31,12 @@ impl<'txn> Iterator for RoPrefix<'txn> {
     fn next(&mut self) -> Option<Self::Item> {
         let result = if self.move_on_first {
             self.move_on_first = false;
-            self.cursor
-                .move_on_key_greater_than_or_equal_to(&self.prefix)
+            self.cursor.move_on_key_greater_than_or_equal_to(&self.prefix)
         } else {
             self.cursor.move_on_next()
         };
 
-        result
-            .map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix)))
-            .transpose()
+        result.map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix))).transpose()
     }
 
     fn last(mut self) -> Option<Self::Item> {
@@ -62,9 +55,7 @@ impl<'txn> Iterator for RoPrefix<'txn> {
             }
         };
 
-        result
-            .map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix)))
-            .transpose()
+        result.map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix))).transpose()
     }
 }
 
@@ -76,11 +67,7 @@ pub struct RwPrefix<'txn> {
 
 impl<'txn> RwPrefix<'txn> {
     pub(crate) fn new(cursor: RwCursor<'txn>, prefix: Vec<u8>) -> RwPrefix<'txn> {
-        RwPrefix {
-            cursor,
-            prefix,
-            move_on_first: true,
-        }
+        RwPrefix { cursor, prefix, move_on_first: true }
     }
 
     /// Delete the entry the cursor is currently pointing to.
@@ -164,15 +151,12 @@ impl<'txn> Iterator for RwPrefix<'txn> {
     fn next(&mut self) -> Option<Self::Item> {
         let result = if self.move_on_first {
             self.move_on_first = false;
-            self.cursor
-                .move_on_key_greater_than_or_equal_to(&self.prefix)
+            self.cursor.move_on_key_greater_than_or_equal_to(&self.prefix)
         } else {
             self.cursor.move_on_next()
         };
 
-        result
-            .map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix)))
-            .transpose()
+        result.map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix))).transpose()
     }
 
     fn last(mut self) -> Option<Self::Item> {
@@ -191,9 +175,7 @@ impl<'txn> Iterator for RwPrefix<'txn> {
             }
         };
 
-        result
-            .map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix)))
-            .transpose()
+        result.map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix))).transpose()
     }
 }
 
@@ -205,11 +187,7 @@ pub struct RoRevPrefix<'txn> {
 
 impl<'txn> RoRevPrefix<'txn> {
     pub(crate) fn new(cursor: RoCursor<'txn>, prefix: Vec<u8>) -> RoRevPrefix<'txn> {
-        RoRevPrefix {
-            cursor,
-            prefix,
-            move_on_last: true,
-        }
+        RoRevPrefix { cursor, prefix, move_on_last: true }
     }
 }
 
@@ -224,20 +202,15 @@ impl<'txn> Iterator for RoRevPrefix<'txn> {
             self.cursor.move_on_prev()
         };
 
-        result
-            .map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix)))
-            .transpose()
+        result.map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix))).transpose()
     }
 
     fn last(mut self) -> Option<Self::Item> {
         let result = if self.move_on_last {
-            self.cursor
-                .move_on_key_greater_than_or_equal_to(&self.prefix)
+            self.cursor.move_on_key_greater_than_or_equal_to(&self.prefix)
         } else {
             let current = self.cursor.current();
-            let start = self
-                .cursor
-                .move_on_key_greater_than_or_equal_to(&self.prefix);
+            let start = self.cursor.move_on_key_greater_than_or_equal_to(&self.prefix);
             match (current, start) {
                 (Ok(Some((ckey, _))), Ok(Some((key, data)))) if ckey != key => {
                     Ok(Some((key, data)))
@@ -247,9 +220,7 @@ impl<'txn> Iterator for RoRevPrefix<'txn> {
             }
         };
 
-        result
-            .map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix)))
-            .transpose()
+        result.map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix))).transpose()
     }
 }
 
@@ -261,11 +232,7 @@ pub struct RwRevPrefix<'txn> {
 
 impl<'txn> RwRevPrefix<'txn> {
     pub(crate) fn new(cursor: RwCursor<'txn>, prefix: Vec<u8>) -> RwRevPrefix<'txn> {
-        RwRevPrefix {
-            cursor,
-            prefix,
-            move_on_last: true,
-        }
+        RwRevPrefix { cursor, prefix, move_on_last: true }
     }
 
     /// Delete the entry the cursor is currently pointing to.
@@ -354,20 +321,15 @@ impl<'txn> Iterator for RwRevPrefix<'txn> {
             self.cursor.move_on_prev()
         };
 
-        result
-            .map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix)))
-            .transpose()
+        result.map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix))).transpose()
     }
 
     fn last(mut self) -> Option<Self::Item> {
         let result = if self.move_on_last {
-            self.cursor
-                .move_on_key_greater_than_or_equal_to(&self.prefix)
+            self.cursor.move_on_key_greater_than_or_equal_to(&self.prefix)
         } else {
             let current = self.cursor.current();
-            let start = self
-                .cursor
-                .move_on_key_greater_than_or_equal_to(&self.prefix);
+            let start = self.cursor.move_on_key_greater_than_or_equal_to(&self.prefix);
             match (current, start) {
                 (Ok(Some((ckey, _))), Ok(Some((key, data)))) if ckey != key => {
                     Ok(Some((key, data)))
@@ -377,8 +339,6 @@ impl<'txn> Iterator for RwRevPrefix<'txn> {
             }
         };
 
-        result
-            .map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix)))
-            .transpose()
+        result.map(|option| option.filter(|(k, _)| k.starts_with(&self.prefix))).transpose()
     }
 }
