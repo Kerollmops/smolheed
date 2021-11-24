@@ -78,12 +78,7 @@ pub struct EnvOpenOptions {
 
 impl EnvOpenOptions {
     pub fn new() -> EnvOpenOptions {
-        EnvOpenOptions {
-            map_size: None,
-            max_readers: None,
-            max_dbs: None,
-            flags: 0,
-        }
+        EnvOpenOptions { map_size: None, max_readers: None, max_dbs: None, flags: 0 }
     }
 
     pub fn map_size(&mut self, size: usize) -> &mut Self {
@@ -223,8 +218,7 @@ impl EnvOpenOptions {
 /// Returns a struct that allows to wait for the effective closing of an environment.
 pub fn env_closing_event<P: AsRef<Path>>(path: P) -> Option<EnvClosingEvent> {
     let lock = OPENED_ENV.read().unwrap();
-    lock.get(path.as_ref())
-        .map(|(_env, se)| EnvClosingEvent(se.clone()))
+    lock.get(path.as_ref()).map(|(_env, se)| EnvClosingEvent(se.clone()))
 }
 
 #[derive(Clone)]
@@ -269,9 +263,7 @@ impl Env {
     }
 
     pub fn open_database(&self, name: Option<&str>) -> Result<Option<Database>> {
-        Ok(self
-            .raw_open_database(name)?
-            .map(|db| Database::new(self.env_mut_ptr() as _, db)))
+        Ok(self.raw_open_database(name)?.map(|db| Database::new(self.env_mut_ptr() as _, db)))
     }
 
     fn raw_open_database(&self, name: Option<&str>) -> Result<Option<u32>> {
@@ -310,8 +302,7 @@ impl Env {
         name: Option<&str>,
         wtxn: &mut RwTxn,
     ) -> Result<Database> {
-        self.raw_create_database(name, wtxn)
-            .map(|db| Database::new(self.env_mut_ptr() as _, db))
+        self.raw_create_database(name, wtxn).map(|db| Database::new(self.env_mut_ptr() as _, db))
     }
 
     fn raw_create_database(&self, name: Option<&str>, wtxn: &mut RwTxn) -> Result<u32> {
@@ -324,12 +315,7 @@ impl Env {
 
         let _lock = self.0.dbi_open_mutex.lock().unwrap();
         let result = unsafe {
-            mdb_result(ffi::mdb_dbi_open(
-                wtxn.txn.txn,
-                name_ptr,
-                ffi::MDB_CREATE,
-                &mut dbi,
-            ))
+            mdb_result(ffi::mdb_dbi_open(wtxn.txn.txn, name_ptr, ffi::MDB_CREATE, &mut dbi))
         };
         drop(name);
 
@@ -376,11 +362,7 @@ impl Env {
         fd: ffi::mdb_filehandle_t,
         option: CompactionOption,
     ) -> Result<()> {
-        let flags = if let CompactionOption::Enabled = option {
-            ffi::MDB_CP_COMPACT
-        } else {
-            0
-        };
+        let flags = if let CompactionOption::Enabled = option { ffi::MDB_CP_COMPACT } else { 0 };
 
         mdb_result(ffi::mdb_env_copy2fd(self.0.env, fd, flags))?;
 
@@ -464,11 +446,11 @@ impl EnvClosingEvent {
 mod tests {
     #[test]
     fn close_env() {
-        use crate::env_closing_event;
-        use crate::EnvOpenOptions;
         use std::path::Path;
         use std::time::Duration;
         use std::{fs, thread};
+
+        use crate::{env_closing_event, EnvOpenOptions};
 
         fs::create_dir_all(Path::new("target").join("close-env.mdb")).unwrap();
         let env = EnvOpenOptions::new()
@@ -493,14 +475,8 @@ mod tests {
 
         // Lets check that we can prefix_iter on that sequence with the key "255".
         let mut iter = db.iter(&wtxn).unwrap();
-        assert_eq!(
-            iter.next().transpose().unwrap(),
-            Some((&b"hello"[..], &b"hello"[..]))
-        );
-        assert_eq!(
-            iter.next().transpose().unwrap(),
-            Some((&b"world"[..], &b"world"[..]))
-        );
+        assert_eq!(iter.next().transpose().unwrap(), Some((&b"hello"[..], &b"hello"[..])));
+        assert_eq!(iter.next().transpose().unwrap(), Some((&b"world"[..], &b"world"[..])));
         assert_eq!(iter.next().transpose().unwrap(), None);
         drop(iter);
 

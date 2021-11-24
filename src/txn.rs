@@ -1,6 +1,5 @@
-use std::marker;
 use std::ops::Deref;
-use std::ptr;
+use std::{marker, ptr};
 
 use crate::mdb::error::mdb_result;
 use crate::mdb::ffi;
@@ -66,38 +65,18 @@ impl<'e> RwTxn<'e, 'e> {
     pub(crate) fn new(env: &'e Env) -> Result<RwTxn<'e, 'e>> {
         let mut txn: *mut ffi::MDB_txn = ptr::null_mut();
 
-        unsafe {
-            mdb_result(ffi::mdb_txn_begin(
-                env.env_mut_ptr(),
-                ptr::null_mut(),
-                0,
-                &mut txn,
-            ))?
-        };
+        unsafe { mdb_result(ffi::mdb_txn_begin(env.env_mut_ptr(), ptr::null_mut(), 0, &mut txn))? };
 
-        Ok(RwTxn {
-            txn: RoTxn { txn, env },
-            _phantom: marker::PhantomData,
-        })
+        Ok(RwTxn { txn: RoTxn { txn, env }, _phantom: marker::PhantomData })
     }
 
     pub(crate) fn nested<'p: 'e>(env: &'e Env, parent: &'p mut RwTxn) -> Result<RwTxn<'e, 'p>> {
         let mut txn: *mut ffi::MDB_txn = ptr::null_mut();
         let parent_ptr: *mut ffi::MDB_txn = parent.txn.txn;
 
-        unsafe {
-            mdb_result(ffi::mdb_txn_begin(
-                env.env_mut_ptr(),
-                parent_ptr,
-                0,
-                &mut txn,
-            ))?
-        };
+        unsafe { mdb_result(ffi::mdb_txn_begin(env.env_mut_ptr(), parent_ptr, 0, &mut txn))? };
 
-        Ok(RwTxn {
-            txn: RoTxn { txn, env },
-            _phantom: marker::PhantomData,
-        })
+        Ok(RwTxn { txn: RoTxn { txn, env }, _phantom: marker::PhantomData })
     }
 
     pub fn commit(self) -> Result<()> {

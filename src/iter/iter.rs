@@ -7,10 +7,7 @@ pub struct RoIter<'txn> {
 
 impl<'txn> RoIter<'txn> {
     pub(crate) fn new(cursor: RoCursor<'txn>) -> RoIter<'txn> {
-        RoIter {
-            cursor,
-            move_on_first: true,
-        }
+        RoIter { cursor, move_on_first: true }
     }
 }
 
@@ -52,10 +49,7 @@ pub struct RwIter<'txn> {
 
 impl<'txn> RwIter<'txn> {
     pub(crate) fn new(cursor: RwCursor<'txn>) -> RwIter<'txn> {
-        RwIter {
-            cursor,
-            move_on_first: true,
-        }
+        RwIter { cursor, move_on_first: true }
     }
 
     /// Delete the entry the cursor is currently pointing to.
@@ -171,10 +165,7 @@ pub struct RoRevIter<'txn> {
 
 impl<'txn> RoRevIter<'txn> {
     pub(crate) fn new(cursor: RoCursor<'txn>) -> RoRevIter<'txn> {
-        RoRevIter {
-            cursor,
-            move_on_last: true,
-        }
+        RoRevIter { cursor, move_on_last: true }
     }
 }
 
@@ -216,10 +207,7 @@ pub struct RwRevIter<'txn> {
 
 impl<'txn> RwRevIter<'txn> {
     pub(crate) fn new(cursor: RwCursor<'txn>) -> RwRevIter<'txn> {
-        RwRevIter {
-            cursor,
-            move_on_last: true,
-        }
+        RwRevIter { cursor, move_on_last: true }
     }
 
     /// Delete the entry the cursor is currently pointing to.
