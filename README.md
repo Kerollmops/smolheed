@@ -1,5 +1,7 @@
 # smolheed
 
+⚠️ This repository has been archived in favor of [the maintained heed LMDB wrapper](https://github.com/meilisearch/heed) ⚠️
+
 A thin wrapped on top of [LMDB] with minimum overhead.
 It is derived [from the heed crate](https://github.com/Kerollmops/heed) which is more typed and a little bit more complex.
 
